@@ -1,0 +1,7 @@
+{
+	"name": "angular-sortable",
+	"main": "./src/sortable.angular.js",
+	"dependencies": {
+		"hammerjs": "~1.x"
+	}
+}

@@ -1,0 +1,33 @@
+<html ng-app="app">
+<head>
+    <title>Angular multiselect</title>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script src="app.js"></script>
+    <script src="../src/sortable.angular.js"></script>
+    <script src="../bower_components/hammerjs/hammer.min.js"></script>
+</head>
+<body ng-controller="AppCtrl">
+	<h1>Example</h1>
+	<table class="table" ui-sortable ng-model="tracks">
+		<thead>
+			<tr>
+				<th>h</th>
+				<th>#</th>
+				<th>track</th>
+				<th>artist</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="track in tracks">
+				<td>#</td>
+				<td>{{$index}}</td>
+				<td ng-bind="track.title"></td>
+				<td ng-bind="track.artist"></td>
+			</tr>
+		</tbody>
+	</table>
+	<button class="btn btn-default" ng-click="addItem()">Add Track</button>
+</body>
