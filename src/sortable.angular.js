@@ -17,11 +17,30 @@ angular.module('ui.sortable', [])
 				callbacks.handleDragStart = function(e) {
 					// here we probably need to replace the current element with some blank placeholder or something
 					// console.log('okay we\'re dragging');
+
+					console.log(e);
+					// let's set up the dragging Element
+					// ------------------------------------------------
+					currentDraggingElement = e.target.parentNode.cloneNode();
+					currentDraggingElement.style.position = 'absolute';
+					currentDraggingElement.style.top = 10;
+					currentDraggingElement.style.zIndex = "11";
+
+
+
+					// add to table
+					//element.css('position', 'relative');
+					element.append(currentDraggingElement);
+					// ------------------------------------------------
+
 					this.style.opacity = 0;
+
+					currentDraggingElement.style.opacity = 1;
 				}
 
 				callbacks.handleDrag = function(e) {
-					console.log(e);
+					//console.log(e);
+					currentDraggingElement.style.top = e.gesture.center.clientY;
 				}
 
 				callbacks.handleDragOver = function(e) {
@@ -96,6 +115,7 @@ angular.module('ui.sortable', [])
 						console.log(key);
 						Hammer(value).on('dragstart', callbacks.handleDragStart);
 						Hammer(value).on('dragend', callbacks.handleDragEnd);
+						Hammer(value).on('drag', callbacks.handleDrag);
 						// value.draggable = true;
 						// value.addEventListener('dragstart', callbacks.handleDragStart, false);
 						// value.addEventListener('dragenter', callbacks.handleDragEnter, false);
