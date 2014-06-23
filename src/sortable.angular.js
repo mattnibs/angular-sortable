@@ -16,25 +16,8 @@ angular.module('ui.sortable', [])
 
 				callbacks.handleDragStart = function(e) {
 					// here we probably need to replace the current element with some blank placeholder or something
-					dragSourceElement = this;
-					currentDraggingElement = this.cloneNode(true);
-					//this.style.opacity = 0;
-
-					// setup Dragging Element and append it to table
-					console.log(e);
-					currentDraggingElement.style.position = 'absolute';
-					currentDraggingElement.style.top = e.y + this.clientHeight;
-					currentDraggingElement.style.left = 0;
-					currentDraggingElement.draggable = false;
-
-					// make table relative
-					//element.css('position', 'relative');
-					element.append(currentDraggingElement);
-					//console.log(clone[0]);
-
-					//e.dataTransfer.effectAllowed = 'move';
-  					e.dataTransfer.setData('text/html', this.innerHTML);
-  					//e.dataTransfer.setDragImage(null,0,0);
+					// console.log('okay we\'re dragging');
+					this.style.opacity = 0;
 				}
 
 				callbacks.handleDrag = function(e) {
@@ -93,13 +76,10 @@ angular.module('ui.sortable', [])
 				}
 
 				callbacks.handleDragEnd = function(e) {
-					// this/e.target is the source node.
-					rows = element[0].querySelectorAll('tr.ng-scope');
-					console.log(rows);
-					[].forEach.call(rows, function (row) {
-						console.log(row);
-						row.classList.remove('over');
-					});
+					// 
+					console.log('drag ends');
+					this.style.opacity = 1;
+					
 				}
 
 				//watch for changes to list
@@ -112,15 +92,18 @@ angular.module('ui.sortable', [])
 					angular.forEach(rows, function(value, key) {
 						//value.draggable = true;
 						value.sortableIndex = key;
+						console.log(value);
 						console.log(key);
-						value.draggable = true;
-						value.addEventListener('dragstart', callbacks.handleDragStart, false);
-						value.addEventListener('dragenter', callbacks.handleDragEnter, false);
-						value.addEventListener('dragover', callbacks.handleDragOver, false);
-						value.addEventListener('dragleave', callbacks.handleDragLeave, false);
-						value.addEventListener('drop', callbacks.handleDrop, false);
-  						value.addEventListener('dragend', callbacks.handleDragEnd, false);
-  						value.addEventListener('drag', callbacks.handleDrag, false)
+						Hammer(value).on('dragstart', callbacks.handleDragStart);
+						Hammer(value).on('dragend', callbacks.handleDragEnd);
+						// value.draggable = true;
+						// value.addEventListener('dragstart', callbacks.handleDragStart, false);
+						// value.addEventListener('dragenter', callbacks.handleDragEnter, false);
+						// value.addEventListener('dragover', callbacks.handleDragOver, false);
+						// value.addEventListener('dragleave', callbacks.handleDragLeave, false);
+						// value.addEventListener('drop', callbacks.handleDrop, false);
+  				// 		value.addEventListener('dragend', callbacks.handleDragEnd, false);
+  				// 		value.addEventListener('drag', callbacks.handleDrag, false)
 					});
 				})
 
