@@ -1,3 +1,9 @@
 tr.over {
 	border:2px solid #000;
 }
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}

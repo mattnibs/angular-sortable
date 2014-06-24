@@ -10,24 +10,26 @@
     <script src="../bower_components/hammerjs/hammer.min.js"></script>
 </head>
 <body ng-controller="AppCtrl">
-	<h1>Example</h1>
-	<table class="table" ui-sortable ng-model="tracks">
-		<thead>
-			<tr>
-				<th>h</th>
-				<th>#</th>
-				<th>track</th>
-				<th>artist</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="track in tracks">
-				<td>#</td>
-				<td>{{$index}}</td>
-				<td ng-bind="track.title"></td>
-				<td ng-bind="track.artist"></td>
-			</tr>
-		</tbody>
-	</table>
-	<button class="btn btn-default" ng-click="addItem()">Add Track</button>
+	<div class="container">
+		<h1>Example</h1>
+		<table class="table" ui-sortable ng-model="tracks">
+			<thead>
+				<tr>
+					<th>h</th>
+					<th>#</th>
+					<th>track</th>
+					<th>artist</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="track in tracks">
+					<td>#</td>
+					<td>{{$index}}</td>
+					<td ng-bind="track.title"></td>
+					<td ng-bind="track.artist"></td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-default" ng-click="addItem()">Add Track</button>
+	</div>
 </body>

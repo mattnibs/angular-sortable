@@ -11,87 +11,53 @@ angular.module('ui.sortable', [])
 				var rows = element[0].querySelectorAll('tr.ng-scope');
 				var currentDraggingElement;
 				var dragSourceElement;
+				var placeholder;
 				var callbacks = {};
-				console.log(element);
+
+
+
+				function getRelativePosition(event) {
+					// here's the page position
+					var top = element[0].getBoundingClientRect().top + document.body.scrollTop;
+
+					return event.gesture.center.clientY - top - 17;
+				}
 
 				callbacks.handleDragStart = function(e) {
 					// here we probably need to replace the current element with some blank placeholder or something
 					// console.log('okay we\'re dragging');
 
-					console.log(e);
 					// let's set up the dragging Element
 					// ------------------------------------------------
-					currentDraggingElement = e.target.parentNode.cloneNode();
-					currentDraggingElement.style.position = 'absolute';
-					currentDraggingElement.style.top = 10;
-					currentDraggingElement.style.zIndex = "11";
+					var selectedRow = angular.element(e.target.parentNode);
+					placeholder = selectedRow.clone();
+					placeholder.css('visibility', 'hidden');
+					placeholder.addClass('placeholder');
+					selectedRow.after(placeholder);
+
+					var children = selectedRow.children();
+					for(var i = 0; i < children.length; i++) {
+						children[i].style.width =children[i].offsetWidth;
+					}
+
+					selectedRow.css('position', 'absolute');
+					selectedRow.css('z-index', 1000);
+					selectedRow.css('top', getRelativePosition(e));
 
 
 
 					// add to table
-					//element.css('position', 'relative');
-					element.append(currentDraggingElement);
+					element.css('position', 'relative');
 					// ------------------------------------------------
 
-					this.style.opacity = 0;
+					// set to current dragging row
+					currentDraggingElement = selectedRow;
 
-					currentDraggingElement.style.opacity = 1;
 				}
 
 				callbacks.handleDrag = function(e) {
-					//console.log(e);
-					currentDraggingElement.style.top = e.gesture.center.clientY;
-				}
-
-				callbacks.handleDragOver = function(e) {
-				    if (e.preventDefault) {
-				    	e.preventDefault(); // Necessary. Allows us to drop.
-				  	}
-
-				  	e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
-
-				  	return false;
-				}
-
-				callbacks.handleDragEnter = function(e) {
-				  	// this / e.target is the current hover target.
-				  	this.classList.add('over');
-				}
-
-				callbacks.handleDragLeave = function(e) {
-				  	this.classList.remove('over');  // this / e.target is previous target element.
-				}
-
-				callbacks.handleDrop = function(e) {
-				  // this / e.target is current target element.
-				  console.log('dropped');
-				  	dragSourceElement.style.opacity = 1;
-
-
-					if (e.stopPropagation) {
-				    	e.stopPropagation(); // stops the browser from redirecting.
-				  	}
-
-					// See the section on the DataTransfer object.
-					if (dragSourceElement != this) {
-    					// Set the source column's HTML to the HTML of the column we dropped on.
-    					
-    					dragSourceElement.innerHTML = this.innerHTML;
-    					this.innerHTML = e.dataTransfer.getData('text/html');
-
-    					var dragSourceIndex = dragSourceElement.sortableIndex;
-    					var dropSourceIndex = this.sortableIndex;
-
-    					scope.$apply(function() {
-    						ngModel.$modelValue.splice(
-                    			dropSourceIndex, 0,
-                    			ngModel.$modelValue.splice(dragSourceIndex, 1)[0]);
-
-    						console.log(ngModel);
-    					})
-  					}
-
-				  return false;
+					currentDraggingElement.css('top', getRelativePosition(e));
+					// here's where clever calculation will occur to detect if elements need to be move and what not
 				}
 
 				callbacks.handleDragEnd = function(e) {
